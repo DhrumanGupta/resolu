@@ -1,0 +1,42 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id                  String     @id @default(cuid())
+  email               String     @unique
+  passwordHash        String
+  salt                String
+  name                String
+  petitions           Petition[]
+}
+
+model Petition {
+  id                  String     @id @default(cuid())
+  title               String
+  description         String
+  listedById          String
+  listedBy            User       @relation(fields: [listedById], references: [id])
+  listedOn            DateTime   @default(now())
+  goal                Int        @default(1000)
+  votes               Vote[]
+  videoId             String
+  latitude            Float 
+  longitude            Float 
+}
+
+model Vote {
+  id                  String     @id @default(cuid())
+  voterEmail          String     @unique
+  petition            Petition   @relation(fields: [petitionId], references: [id])
+  petitionId          String     
+}
