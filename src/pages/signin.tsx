@@ -9,13 +9,29 @@ import Link from "next/link";
 import MetaDecorator from "components/MetaDecorator";
 import InputGroup from "components/InputGroup";
 import PasswordInputGroup from "components/PasswordInputGroup";
+import {useState} from "react";
+import useAxiosData from "../hooks/useAxiosData";
+import {PrimaryButton, SecondaryButton} from "components/Button";
+import axios from "axios";
+import { authRoutes, requestRoutes } from "../data/Routes";
+
 
 const Home: NextPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordHidden, setPasswordHidden] = useState(true);
+  const [data, makeRequest] = useAxiosData();
+
+const handleInput = (e: FormEvent<HTMLFormElement>)=>{
+      e.preventDefault();
+      makeRequest(axios.post(authRoutes.login, {email, password}))
+  }
+
   return (
     <>
       <MetaDecorator
-        title="SIgn Up"
-        description="BorrowMyBooks is a one-stop application for finding and listing IB-MYP and IBDP books. BorrowMyBooks simplifies the entire process and streamlines communication so you can find and list books faster."
+        title="Sign In"
+      description="Resolu is a global platform for petitions and petitions. We help you to create, sign, and share petitions by using short form content"
       />
       <main className="container-custom justify-center flex flex-col h-[85vh]">
         {" "}
@@ -24,25 +40,23 @@ const Home: NextPage = () => {
           <p>
             Don&apos;t have an account? <Link href="/signup">Sign Up.</Link>
           </p>
-          <form className="flex flex-col mt-4">
+            <form className="flex flex-col mt-4" onSubmit={e=>e.preventDefault()}>
             <InputGroup
               label="Email"
               type="email"
-              value={""}
-              setValue={(x) => {
-                console.log(x);
-              }}
+              value={email}
+              setValue={setEmail}
             />
 
             <PasswordInputGroup
               label="Password"
-              hidden={true}
-              setHidden={(value) => console.log(value)}
-              value={""}
-              setValue={(x) => {
-                console.log(x);
-              }}
+              hidden={passwordHidden}
+              setHidden={setPasswordHidden}
+              value={password}
+              setValue={setPassword}
             />
+          <PrimaryButton className="!py-3 mt-6" onClick={handleInput} >Login</PrimaryButton>
+
           </form>
           {/* <h1 className="mb-1">Don&apos;t buy, borrow</h1>
           <p className="md:max-w-[90%] lg:max-w-[80%]">

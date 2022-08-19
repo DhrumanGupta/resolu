@@ -19,7 +19,7 @@ const schema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(8).max(32).required(),
   name: Joi.string()
-    .regex(/^[a-zA-Z ]*$/gm)
+    .regex(/^[a-zA-Z ]*$/)
     .min(6)
     .max(32)
     .required(),

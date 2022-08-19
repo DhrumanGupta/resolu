@@ -30,6 +30,8 @@ const PasswordInputGroup = <T extends unknown>({
           type={hidden ? "password" : "text"}
           id={label}
           className="p-2 bg-gray-light flex-grow rounded"
+          onChange={e=>setValue(e.target.value)}
+
         />
         <button
           className="m-2"
