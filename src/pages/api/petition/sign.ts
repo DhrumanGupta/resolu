@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import Joi from "joi";
 import validate from "lib/middlewares/validate";
-import { User } from "types/DTOs";
 import type { ErrorFallback } from "types/responses";
 import { withSessionRoute } from "lib/sesion";
 import { getPetition } from "lib/repos/petition";
