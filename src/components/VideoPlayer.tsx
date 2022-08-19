@@ -12,6 +12,7 @@ export function VideoPlayer({ id, ...props }: IVideoPlayerProps) {
       controls={false}
       autoPlay={true}
       id="video-player"
+      loop={true}
       {...props}
       src={`${petitionRoutes.video}?videoId=${id}`}
     />
