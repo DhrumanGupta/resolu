@@ -9,12 +9,22 @@ import Link from "next/link";
 import MetaDecorator from "components/MetaDecorator";
 import InputGroup from "components/InputGroup";
 import PasswordInputGroup from "components/PasswordInputGroup";
+import useAxiosData from "../hooks/useAxiosData";
+import {PrimaryButton, SecondaryButton} from "components/Button";
 import { useState } from "react";
+import axios from "axios";
+import { authRoutes, requestRoutes } from "data/Routes";
 
 const Home: NextPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordHidden, setPasswordHidden] = useState(true);
+  const [userName, setName] = useState("");
+
+  const handleInput = (e: FormEvent<HTMLFormElement>)=>{
+      e.preventDefault();
+      useAxiosData(axios.post(authRoutes.register, {email, password, userName}))
+  }
 
   return (
     <>
@@ -42,6 +52,13 @@ const Home: NextPage = () => {
               setValue={setEmail}
             />
 
+            <InputGroup
+              label="Name"
+              type="text"
+              value={userName}
+              setValue={setName}
+            />
+
             <PasswordInputGroup
               label="Password"
               hidden={passwordHidden}
@@ -49,6 +66,8 @@ const Home: NextPage = () => {
               value={password}
               setValue={setPassword}
             />
+            <PrimaryButton className="!py-3 mt-6" onClick={console.log("")}>Login</PrimaryButton>
+
           </form>
           {/* <h1 className="mb-1">Don&apos;t buy, borrow</h1>
           <p className="md:max-w-[90%] lg:max-w-[80%]">
