@@ -10,6 +10,7 @@ import { PrimaryButton } from "components/Button";
 import { FormEvent, useState } from "react";
 import axios from "axios";
 import { authRoutes } from "../data/Routes";
+import useUser from "hooks/useUser";
 
 const Home: NextPage = () => {
   const [email, setEmail] = useState("");
@@ -18,12 +19,17 @@ const Home: NextPage = () => {
   const [userName, setName] = useState("");
   const [data, makeRequest] = useAxiosData();
 
+  const { mutate } = useUser();
+
   const handleInput = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // @ts-ignore
-    makeRequest(
-      axios.post(authRoutes.register, { email, password, name: userName })
-    );
+    axios
+      .post(authRoutes.register, { email, password, name: userName })
+      .then((resp) => {
+        mutate(null);
+      })
+      .catch((resp) => {});
   };
 
   return (
@@ -39,12 +45,7 @@ const Home: NextPage = () => {
           <p>
             Already have an account? <Link href="/signin">Sign In.</Link>
           </p>
-          <form
-            className="flex flex-col mt-4"
-            onSubmit={(e) => {
-              e.preventDefault();
-            }}
-          >
+          <form className="flex flex-col mt-4" onSubmit={handleInput}>
             <InputGroup
               label="Email"
               type="email"
@@ -66,9 +67,7 @@ const Home: NextPage = () => {
               value={password}
               setValue={setPassword}
             />
-            <PrimaryButton className="!py-3 mt-6" onClick={handleInput as any}>
-              Signup
-            </PrimaryButton>
+            <PrimaryButton className="!py-3 mt-6">Signup</PrimaryButton>
           </form>
           {/* <h1 className="mb-1">Don&apos;t buy, borrow</h1>
           <p className="md:max-w-[90%] lg:max-w-[80%]">

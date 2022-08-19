@@ -49,7 +49,7 @@ const Home: NextPage = () => {
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-6 gap-6">
           {petitions.data &&
             petitions.data.map((petition) => (
               <PetitionCard key={petition.id} petition={petition} />
@@ -59,9 +59,6 @@ const Home: NextPage = () => {
     </>
   );
 };
-
-// @ts-ignore
-Home.isProtected = true;
 
 const PetitionCard: FC<{ petition: Petition }> = ({ petition }) => {
   return (

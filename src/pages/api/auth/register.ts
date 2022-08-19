@@ -20,8 +20,6 @@ const schema = Joi.object({
   password: Joi.string().required(),
   name: Joi.string()
     .regex(/^[a-zA-Z ]*$/)
-    .min(6)
-    .max(32)
     .required(),
 });
 

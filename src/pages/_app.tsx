@@ -20,7 +20,18 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Navbar />
-      {isProtected ? (
+      {isProtected && (
+        <ProtectedPage>
+          <Component {...pageProps} />
+        </ProtectedPage>
+      )}
+      {isAnonymous && (
+        <AnonymousPage>
+          <Component {...pageProps} />
+        </AnonymousPage>
+      )}
+      {!isAnonymous && !isProtected && <Component {...pageProps} />}
+      {/* {isProtected ? (
         <ProtectedPage>
           <Component {...pageProps} />
         </ProtectedPage>
@@ -30,7 +41,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         </AnonymousPage>
       ) : (
         <Component {...pageProps} />
-      )}
+      )} */}
     </>
   );
 }

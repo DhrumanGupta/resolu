@@ -7,7 +7,7 @@ type HydratedPetition = Prisma.PetitionGetPayload<{
   include: { votes: true; listedBy: true };
 }>;
 
-const DtoFromHydrated = (petition: HydratedPetition): Petition => ({
+export const DtoFromHydrated = (petition: HydratedPetition): Petition => ({
   id: petition.id,
   title: petition.title,
   description: petition.description,

@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import NotFound from "pages/404";
 import { VideoPlayer } from "components/VideoPlayer";
+import MapChart from "components/MapChart";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -43,7 +44,12 @@ const Home: NextPage = () => {
     <>
       <MetaDecorator description="Resolu is a global platform for petitions and petitions. We help you to create, sign, and share petitions by using short form content" />
       <main className="container-custom pt-6 lg:pt-12">
-        <VideoPlayer height="800px" width="auto" id={petition.data.videoId} />
+        <h1>{petition.data.title}</h1>
+        <VideoPlayer
+          className="w-full md:w-96 rounded-md"
+          id={petition.data.videoId}
+        />
+        <MapChart lat={petition.data.latitude} long={petition.data.longitude} />
         {/* <InputGroup
           value={emailInput}
           setValue={setEmailInput}
@@ -54,9 +60,6 @@ const Home: NextPage = () => {
     </>
   );
 };
-
-// @ts-ignore
-Home.isProtected = true;
 
 export default Home;
 // function MobileMenu({
