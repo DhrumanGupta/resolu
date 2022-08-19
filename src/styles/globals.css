@@ -24,7 +24,7 @@
   }
 
   .container-custom {
-    @apply container mx-auto w-10/12 lg:w-9/12;
+    @apply w-[90%] mx-auto max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg;
   }
 }
 

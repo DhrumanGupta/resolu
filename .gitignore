@@ -3,6 +3,10 @@
 videos/*
 !videos/.gitkeep
 
+
+public/video-images/*
+!public/video-images/.gitkeep
+
 # dependencies
 /node_modules
 /.pnp

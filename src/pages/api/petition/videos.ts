@@ -1,11 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import busboy, { FileInfo } from "busboy";
+import busboy from "busboy";
 import fs from "fs";
 import { prisma } from "lib/db";
 import { createHash } from "crypto";
-import type { Readable } from "stream";
 import { User } from "types/DTOs";
 import authorizedRoute from "lib/middlewares/authorizedRoute";
+import { exec } from "child_process";
 
 export const config = {
   api: {
@@ -30,12 +30,10 @@ function uploadVideoStream(
   const bb = busboy({ headers: req.headers });
 
   let valid: undefined | boolean = undefined;
+  let fileName: undefined | string = undefined;
 
   bb.on("file", async (_, file, info) => {
-    console.log(info.filename);
-
-    const fileName = hash(info.filename);
-    console.log(fileName);
+    fileName = hash(info.filename);
     if (valid === false) {
       req.unpipe(bb);
       return res.status(400).send({ msg: "Invalid petition" });
@@ -62,6 +60,12 @@ function uploadVideoStream(
   bb.on("close", () => {
     res.writeHead(200, { Connection: "close" });
     res.end("Video uploaded successfully!");
+
+    try {
+      exec(
+        `ffmpeg -i ./videos/${fileName}.mp4 -vf "select=eq(n\\,0)" -q:v 3 ./public/video-images/${fileName}.jpg`
+      );
+    } catch {}
   });
 
   req.pipe(bb);
@@ -76,7 +80,7 @@ function getVideoStream(req: NextApiRequest, res: NextApiResponse) {
     return res.status(400).send({ msg: "No range provided" });
   }
 
-  const videoId = hash(req.query.videoId as string);
+  const videoId = req.query.videoId;
   const videoPath = `./videos/${videoId}.mp4`;
 
   if (!fs.existsSync(videoPath)) {

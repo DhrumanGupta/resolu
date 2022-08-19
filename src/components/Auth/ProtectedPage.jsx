@@ -15,7 +15,11 @@ function ProtectedPage({ children }) {
   }, [loggedIn, loading, router]);
 
   if (loading || !loggedIn) {
-    return <Loading />;
+    return (
+      <div className="absolute bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2">
+        <Loading />
+      </div>
+    );
   }
 
   return children;

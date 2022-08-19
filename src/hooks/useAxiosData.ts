@@ -1,16 +1,16 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-type Data = {
+type Data<T> = {
   loading: boolean;
   error: boolean;
-  data: any;
+  data: T | undefined;
 };
 
 type Method = (args: any) => void;
 
-const useAxiosData = () => {
-  const [data, setData] = useState<Data>({
+const useAxiosData = <T>() => {
+  const [data, setData] = useState<Data<T>>({
     loading: false,
     data: undefined,
     error: false,

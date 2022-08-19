@@ -1,8 +1,7 @@
 import MetaDecorator from "components/MetaDecorator";
-import type { NextPageContext } from "next";
 import Link from "next/link";
 
-const Error = () => {
+const NotFound = () => {
   return (
     <main className="absolute bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2">
       <MetaDecorator
@@ -21,4 +20,4 @@ const Error = () => {
   );
 };
 
-export default Error;
+export default NotFound;
