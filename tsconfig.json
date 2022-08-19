@@ -18,6 +18,8 @@
     "paths": {
       "lib/*": ["./src/lib/*"],
       "pages/*": ["./src/pages/*"],
+      "hooks/*": ["./src/hooks/*"],
+      "data/*": ["./src/data/*"],
       "types/*": ["./src/types/*"],
       "components/*": ["./src/components/*"]
     }

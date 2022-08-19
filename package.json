@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@prisma/client": "^4.2.1",
+    "axios": "^0.27.2",
     "busboy": "^1.6.0",
     "clsx": "^1.2.1",
     "iron-session": "^6.1.3",
