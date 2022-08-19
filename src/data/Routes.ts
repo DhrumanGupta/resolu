@@ -18,4 +18,5 @@ export const petitionRoutes = {
   getAll: (query: string) => `${petitionBaseRoute}/${query}`,
   create: `${petitionBaseRoute}/`,
   sign: `${petitionBaseRoute}/sign`,
+  video: `${petitionBaseRoute}/videos`,
 };

@@ -1,7 +1,7 @@
 import { prisma } from "lib/db";
 import { Prisma } from "@prisma/client";
 import type { Petition, User } from "types/DTOs";
-import { hash } from "pages/api/videos";
+import { hash } from "pages/api/petition/videos";
 
 type HydratedPetition = Prisma.PetitionGetPayload<{
   include: { votes: true; listedBy: true };

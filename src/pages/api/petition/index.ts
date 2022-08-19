@@ -6,6 +6,8 @@ import {
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Petition, User } from "types/DTOs";
 import { ErrorFallback } from "types/responses";
+import requestIp from "request-ip";
+import axios from "axios";
 
 interface GetRequest extends NextApiRequest {
   query: {
@@ -33,8 +35,6 @@ interface PostRequest extends NextApiRequest {
     description: string;
     goal: number;
     videoName: string;
-    latitude: number;
-    longitude: number;
   };
 }
 
@@ -43,27 +43,30 @@ const createPetition = async (
   res: NextApiResponse<ErrorFallback<Petition>>,
   user: User
 ) => {
-  const { title, description, goal, videoName, latitude, longitude } = req.body;
+  const { title, description, goal, videoName } = req.body;
   if (
     title === undefined ||
     description === undefined ||
     goal === undefined ||
-    videoName === undefined ||
-    latitude === undefined ||
-    longitude === undefined
+    videoName === undefined
   ) {
     return res.status(400).send({ msg: "Missing required fields" });
   }
 
+  const ip = requestIp.getClientIp(req)?.split(":").splice(-1)[0];
+
+  const { data } = await axios.get(`https://ipapi.co/${ip}/json/`);
   const petition = await createPetitionFromDb({
     title,
     description,
     goal,
     videoName,
-    latitude,
-    longitude,
+    latitude: data.latitude,
+    longitude: data.longitude,
     user,
   });
+
+  // const petition = null;
 
   if (!petition) {
     return res.status(400).send({ msg: "Duplicate (1)" });

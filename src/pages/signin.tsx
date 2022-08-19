@@ -6,7 +6,7 @@ import PasswordInputGroup from "components/PasswordInputGroup";
 import { FormEvent, useEffect, useState } from "react";
 import { PrimaryButton, SecondaryButton } from "components/Button";
 import axios from "axios";
-import { authRoutes, requestRoutes } from "../data/Routes";
+import { authRoutes } from "../data/Routes";
 import useUser from "../hooks/useUser";
 
 const Home: NextPage = () => {

@@ -2,7 +2,7 @@ import clsx from "clsx";
 import * as React from "react";
 
 export interface IButtonProps {
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => any;
+  onClick?: (event: any) => any;
   children?: React.ReactNode;
   className?: string;
 }
