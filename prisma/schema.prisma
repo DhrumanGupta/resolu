@@ -31,12 +31,12 @@ model Petition {
   votes               Vote[]
   videoId             String
   latitude            Float 
-  longitude            Float 
+  longitude           Float 
 }
 
 model Vote {
   id                  String     @id @default(cuid())
-  voterEmail          String     @unique
+  voterEmail          String
   petition            Petition   @relation(fields: [petitionId], references: [id])
   petitionId          String     
 }

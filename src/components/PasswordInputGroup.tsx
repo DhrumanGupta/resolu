@@ -31,7 +31,12 @@ const PasswordInputGroup = <T extends unknown>({
           id={label}
           className="p-2 bg-gray-light flex-grow rounded"
         />
-        <button className="m-2">
+        <button
+          className="m-2"
+          onClick={() => {
+            setHidden(!hidden);
+          }}
+        >
           {hidden ? (
             <EyeHidden className="w-4 h-auto" />
           ) : (

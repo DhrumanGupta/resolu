@@ -9,8 +9,13 @@ import Link from "next/link";
 import MetaDecorator from "components/MetaDecorator";
 import InputGroup from "components/InputGroup";
 import PasswordInputGroup from "components/PasswordInputGroup";
+import { useState } from "react";
 
 const Home: NextPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordHidden, setPasswordHidden] = useState(true);
+
   return (
     <>
       <MetaDecorator
@@ -24,32 +29,25 @@ const Home: NextPage = () => {
           <p>
             Already have an account? <Link href="/signin">Sign In.</Link>
           </p>
-          <form className="flex flex-col mt-4">
-            <InputGroup
-              label="Username"
-              value={""}
-              setValue={(x) => {
-                console.log(x);
-              }}
-            />
-
+          <form
+            className="flex flex-col mt-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}
+          >
             <InputGroup
               label="Email"
               type="email"
-              value={""}
-              setValue={(x) => {
-                console.log(x);
-              }}
+              value={email}
+              setValue={setEmail}
             />
 
             <PasswordInputGroup
               label="Password"
-              hidden={true}
-              setHidden={(value) => console.log(value)}
-              value={""}
-              setValue={(x) => {
-                console.log(x);
-              }}
+              hidden={passwordHidden}
+              setHidden={setPasswordHidden}
+              value={password}
+              setValue={setPassword}
             />
           </form>
           {/* <h1 className="mb-1">Don&apos;t buy, borrow</h1>

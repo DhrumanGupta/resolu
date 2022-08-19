@@ -24,7 +24,7 @@ const hash = (data: string): string => {
 
 function uploadVideoStream(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse
   user: User
 ) {
   console.log(req.session.user);
@@ -33,22 +33,22 @@ function uploadVideoStream(
   let valid: undefined | boolean = undefined;
 
   bb.on("file", async (_, file, info) => {
-    if (!valid) {
+    if (valid === false) {
       req.unpipe(bb);
       return res.status(400).send({ msg: "Invalid petition" });
     }
     const fileName = hash(info.filename);
 
-    if (valid === undefined) {
-      const user = await prisma.petition.findFirst({
-        where: { videoId: fileName },
-      });
-      if (!user) {
-        valid = false;
-        req.unpipe(bb);
-        return res.status(400).send({ msg: "Invalid petition" });
-      }
-    }
+    // if (valid === undefined) {
+    //   const user = await prisma.petition.findFirst({
+    //     where: { videoId: fileName },
+    //   });
+    //   if (!user) {
+    //     valid = false;
+    //     req.unpipe(bb);
+    //     return res.status(400).send({ msg: "Invalid petition" });
+    //   }
+    // }
 
     const filePath = `./videos/${fileName}.mp4`;
 

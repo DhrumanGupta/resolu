@@ -6,7 +6,7 @@ import Image from "next/image";
 const ROUTES = [
   {
     path: "/petitions",
-    label: "Petitions",
+    label: "Browse Petitions",
   },
   // {
   //   path: "/my-petitions",
