@@ -30,11 +30,10 @@ const PasswordInputGroup = <T extends unknown>({
           type={hidden ? "password" : "text"}
           id={label}
           className="p-2 bg-gray-light flex-grow rounded"
-          onChange={e=>setValue(e.target.value)}
-
+          onChange={(e) => setValue(e.target.value as any)}
         />
-        <button
-          className="m-2"
+        <i
+          className="p-0 m-2 mt-3 hover:cursor-pointer"
           onClick={() => {
             setHidden(!hidden);
           }}
@@ -44,7 +43,7 @@ const PasswordInputGroup = <T extends unknown>({
           ) : (
             <EyeVisible className="w-4 h-auto" />
           )}
-        </button>
+        </i>
       </span>
     </>
   );

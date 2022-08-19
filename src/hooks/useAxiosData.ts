@@ -1,14 +1,22 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 
+type Data = {
+  loading: boolean;
+  error: boolean;
+  data: any;
+};
+
+type Method = (args: any) => void;
+
 const useAxiosData = () => {
-  const [data, setData] = useState({
+  const [data, setData] = useState<Data>({
     loading: false,
     data: undefined,
     error: false,
   });
 
-  const makeRequest = (request: Promise<any>) => {
+  const makeRequest: Method = (request) => {
     setData({
       loading: true,
       data: undefined,
@@ -16,14 +24,14 @@ const useAxiosData = () => {
     });
 
     request
-      .then((resp) => {
+      .then((resp: any) => {
         setData({
           loading: false,
           data: resp.data,
           error: false,
         });
       })
-      .catch((error) => {
+      .catch((error: any) => {
         const obj = {
           loading: false,
           data: undefined,
@@ -34,7 +42,7 @@ const useAxiosData = () => {
       });
   };
 
-  return [data, makeRequest];
+  return [data, makeRequest] as const;
 };
 
 export default useAxiosData;

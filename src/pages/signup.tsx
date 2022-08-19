@@ -1,20 +1,15 @@
 import type { NextPage } from "next";
 // import Image from "next/image";
 import Link from "next/link";
-// import Card from "src/components/Card";
-// import InfoCard from "components/home/InfoCard";
-// import Message from "components/icons/Message";
-// import Search from "components/icons/Search";
-// import Verified from "components/icons/Verified";
 import MetaDecorator from "components/MetaDecorator";
 import InputGroup from "components/InputGroup";
 import PasswordInputGroup from "components/PasswordInputGroup";
 import useAxiosData from "../hooks/useAxiosData";
 
-import {PrimaryButton, SecondaryButton} from "components/Button";
-import { useState } from "react";
+import { PrimaryButton } from "components/Button";
+import { FormEvent, useState } from "react";
 import axios from "axios";
-import { authRoutes, requestRoutes } from "../data/Routes";
+import { authRoutes } from "../data/Routes";
 
 const Home: NextPage = () => {
   const [email, setEmail] = useState("");
@@ -23,17 +18,19 @@ const Home: NextPage = () => {
   const [userName, setName] = useState("");
   const [data, makeRequest] = useAxiosData();
 
-  const handleInput = (e: FormEvent<HTMLFormElement>)=>{
-      e.preventDefault();
-      makeRequest(axios.post(authRoutes.register, {email, password, name: userName}))
-  }
+  const handleInput = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // @ts-ignore
+    makeRequest(
+      axios.post(authRoutes.register, { email, password, name: userName })
+    );
+  };
 
   return (
     <>
       <MetaDecorator
         title="Sign Up"
         description="Resolu is a global platform for petitions and petitions. We help you to create, sign, and share petitions by using short form content"
-
       />
       <main className="container-custom justify-center flex flex-col h-[85vh]">
         {" "}
@@ -69,8 +66,9 @@ const Home: NextPage = () => {
               value={password}
               setValue={setPassword}
             />
-            <PrimaryButton className="!py-3 mt-6" onClick={handleInput} >Signup</PrimaryButton>
-
+            <PrimaryButton className="!py-3 mt-6" onClick={handleInput as any}>
+              Signup
+            </PrimaryButton>
           </form>
           {/* <h1 className="mb-1">Don&apos;t buy, borrow</h1>
           <p className="md:max-w-[90%] lg:max-w-[80%]">
@@ -92,5 +90,8 @@ const Home: NextPage = () => {
     </>
   );
 };
+
+// @ts-ignore
+Home.isAnonymous = true;
 
 export default Home;

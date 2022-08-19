@@ -1,14 +1,14 @@
 import useUser from "../../hooks/useUser";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-import Loading from "../UI/Loading";
+import Loading from "../UI/Loading.jsx";
 
 function ProtectedPage({ children }) {
   const { loading, loggedIn } = useUser();
   const router = useRouter();
 
   useEffect(() => {
-    if (loggedIn) {
+    if (!loggedIn) {
       router.replace("/");
     }
   }, [loggedIn, router]);

@@ -1,37 +1,49 @@
 import type { NextPage } from "next";
-// import Image from "next/image";
 import Link from "next/link";
-// import Card from "src/components/Card";
-// import InfoCard from "components/home/InfoCard";
-// import Message from "components/icons/Message";
-// import Search from "components/icons/Search";
-// import Verified from "components/icons/Verified";
 import MetaDecorator from "components/MetaDecorator";
 import InputGroup from "components/InputGroup";
 import PasswordInputGroup from "components/PasswordInputGroup";
-import {useState} from "react";
-import useAxiosData from "../hooks/useAxiosData";
-import {PrimaryButton, SecondaryButton} from "components/Button";
+import { FormEvent, useEffect, useState } from "react";
+import { PrimaryButton, SecondaryButton } from "components/Button";
 import axios from "axios";
 import { authRoutes, requestRoutes } from "../data/Routes";
-
+import useUser from "../hooks/useUser";
 
 const Home: NextPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordHidden, setPasswordHidden] = useState(true);
-  const [data, makeRequest] = useAxiosData();
+  const [message, setMessage] = useState({ error: false, value: "" });
 
-const handleInput = (e: FormEvent<HTMLFormElement>)=>{
-      e.preventDefault();
-      makeRequest(axios.post(authRoutes.login, {email, password}))
-  }
+  const { mutate } = useUser();
+
+  const handleInput = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // @ts-ignore
+    axios
+      .post(authRoutes.login, { email, password })
+      .then((resp) => {
+        setMessage({
+          error: false,
+          value: "Login successful! You will be redirected shortly..",
+        });
+        mutate(null);
+      })
+      .catch((resp) => {
+        setMessage({
+          error: true,
+          value: "Invalid OTP entered",
+        });
+      });
+
+    mutate(null);
+  };
 
   return (
     <>
       <MetaDecorator
         title="Sign In"
-      description="Resolu is a global platform for petitions and petitions. We help you to create, sign, and share petitions by using short form content"
+        description="Resolu is a global platform for petitions and petitions. We help you to create, sign, and share petitions by using short form content"
       />
       <main className="container-custom justify-center flex flex-col h-[85vh]">
         {" "}
@@ -40,7 +52,10 @@ const handleInput = (e: FormEvent<HTMLFormElement>)=>{
           <p>
             Don&apos;t have an account? <Link href="/signup">Sign Up.</Link>
           </p>
-            <form className="flex flex-col mt-4" onSubmit={e=>e.preventDefault()}>
+          <form
+            className="flex flex-col mt-4"
+            onSubmit={(e) => e.preventDefault()}
+          >
             <InputGroup
               label="Email"
               type="email"
@@ -55,8 +70,9 @@ const handleInput = (e: FormEvent<HTMLFormElement>)=>{
               value={password}
               setValue={setPassword}
             />
-          <PrimaryButton className="!py-3 mt-6" onClick={handleInput} >Login</PrimaryButton>
-
+            <PrimaryButton className="!py-3 mt-6" onClick={handleInput as any}>
+              Login
+            </PrimaryButton>
           </form>
           {/* <h1 className="mb-1">Don&apos;t buy, borrow</h1>
           <p className="md:max-w-[90%] lg:max-w-[80%]">
@@ -78,5 +94,8 @@ const handleInput = (e: FormEvent<HTMLFormElement>)=>{
     </>
   );
 };
+
+// @ts-ignore
+Home.isAnonymous = true;
 
 export default Home;

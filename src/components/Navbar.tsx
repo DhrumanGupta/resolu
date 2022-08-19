@@ -1,19 +1,37 @@
 import React from "react";
 import Link from "next/link";
 import clsx from "clsx";
+import useUser from "src/hooks/useUser";
 
-const ROUTES = [
+type Route = {
+  path: string;
+  label: string;
+  primary?: boolean;
+};
+
+const ROUTES: Route[] = [
   {
     path: "/petitions",
     label: "Browse Petitions",
   },
-  // {
-  //   path: "/my-petitions",
-  //   label: "My Petitions",
-  // },
+];
+
+const ANONYMOUS_ROUTES: Route[] = [
   {
     path: "/signup",
     label: "Sign Up / Sign In",
+    primary: true,
+  },
+];
+
+const PROTECTED_ROUTES: Route[] = [
+  {
+    path: "/my-petitions",
+    label: "My Petitions",
+  },
+  {
+    path: "/create-petitions",
+    label: "Create Petition",
     primary: true,
   },
 ];
@@ -42,6 +60,8 @@ const NavItem = ({
 };
 
 export default function Navbar() {
+  const { loggedIn } = useUser();
+
   return (
     <header className="w-full">
       <nav className="flex child:ml-5 first:m-0 justify-end py-5 pr-5">
@@ -60,12 +80,42 @@ export default function Navbar() {
             className={
               route.primary
                 ? "bg-orange !text-white hover:bg-darkOrange"
-                : "bg-white border-2 border-black !text-black hover:bg-lightGray"
+                : "bg-white border-2 border-black !text-black hover:bg-gray-light"
             }
           >
             {route.label}
           </NavItem>
         ))}
+
+        {!loggedIn &&
+          ANONYMOUS_ROUTES.map((route, index) => (
+            <NavItem
+              key={route.path}
+              to={route.path}
+              className={
+                route.primary
+                  ? "bg-orange !text-white hover:bg-darkOrange"
+                  : "bg-white border-2 border-black !text-black hover:bg-gray-light"
+              }
+            >
+              {route.label}
+            </NavItem>
+          ))}
+
+        {loggedIn &&
+          PROTECTED_ROUTES.map((route, index) => (
+            <NavItem
+              key={route.path}
+              to={route.path}
+              className={
+                route.primary
+                  ? "bg-orange !text-white hover:bg-darkOrange"
+                  : "bg-white border-2 border-black !text-black hover:bg-gray-light"
+              }
+            >
+              {route.label}
+            </NavItem>
+          ))}
       </nav>
     </header>
   );

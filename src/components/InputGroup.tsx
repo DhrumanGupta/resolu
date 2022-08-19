@@ -25,8 +25,7 @@ const InputGroup = <T extends unknown>({
         type={type ? type : typeof value}
         id={label}
         className="bg-gray-light text-md p-2 rounded"
-        onChange={e=>setValue(e.target.value)}
-
+        onChange={(e) => setValue(e.target.value as any)}
       />
     </>
   );
