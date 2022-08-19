@@ -29,6 +29,7 @@ const PasswordInputGroup = <T extends unknown>({
           placeholder={placeholder}
           type={hidden ? "password" : "text"}
           id={label}
+          value={value as any}
           className="p-2 bg-gray-light flex-grow rounded"
           onChange={(e) => setValue(e.target.value as any)}
         />

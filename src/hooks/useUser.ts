@@ -1,20 +1,32 @@
-import useSWR from "swr";
+import useSWR, { KeyedMutator } from "swr";
 import { getUser } from "lib/userApi";
 import { authRoutes } from "../data/Routes";
+import { User } from "types/DTOs";
 
-const useUser = () => {
-  const { data, mutate, error } = useSWR(authRoutes.user, getUser, {
-    refreshInterval: 300000, // 5 Minutes
-    shouldRetryOnError: false,
-  });
+type Data = {
+  loading: boolean;
+  loggedIn: boolean;
+  user: User;
+  mutate: KeyedMutator<User | null>;
+};
 
-  const loading = !data && !error;
-  const loggedIn = !error && data;
+const useUser = (): Data => {
+  const { data, mutate, error } = useSWR<User | null>(
+    authRoutes.user,
+    getUser,
+    {
+      refreshInterval: 300000, // 5 Minutes
+      shouldRetryOnError: false,
+    }
+  );
+
+  const loading = Boolean(!data && !error);
+  const loggedIn = Boolean(!error && data);
 
   return {
     loading,
     loggedIn,
-    user: data,
+    user: data!,
     mutate,
   };
 };

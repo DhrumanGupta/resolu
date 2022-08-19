@@ -2,17 +2,20 @@
 
 //const domain = env === "development" ? "localhost:1337" : "backend.travelcheapwith.tech";
 //const basePath = `http${env !== "development" ? s : ""}://${domain}`;
-const basePath = "/api"
+const basePath = "/api";
 
 const authBaseRoute = `${basePath}/auth`;
 export const authRoutes = {
-    login: `${authBaseRoute}/login`,
-    logout: `${authBaseRoute}/logout`,
-    register: `${authBaseRoute}/register`,
-    user: `${authBaseRoute}/user`,
+  login: `${authBaseRoute}/login`,
+  logout: `${authBaseRoute}/logout`,
+  register: `${authBaseRoute}/register`,
+  user: `${authBaseRoute}/user`,
 };
 
-const requestBaseRoute = `${basePath}/request`;
-export const requestRoutes = {
+const petitionBaseRoute = `${basePath}/petition`;
+export const petitionRoutes = {
+  getFromId: (id: string) => `${petitionBaseRoute}/${id}`,
+  getAll: (query: string) => `${petitionBaseRoute}/${query}`,
+  create: `${petitionBaseRoute}/`,
+  sign: `${petitionBaseRoute}/sign`,
 };
-

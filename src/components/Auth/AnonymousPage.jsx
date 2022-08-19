@@ -8,10 +8,10 @@ function ProtectedPage({ children }) {
   const router = useRouter();
 
   useEffect(() => {
-    if (loggedIn) {
+    if (!loading && loggedIn) {
       router.replace("/");
     }
-  }, [loggedIn, router]);
+  }, [loggedIn, loading, router]);
 
   if (loading || loggedIn) {
     return <Loading />;

@@ -8,12 +8,13 @@ function ProtectedPage({ children }) {
   const router = useRouter();
 
   useEffect(() => {
-    if (!loggedIn) {
+    console.log(loggedIn);
+    if (!loading && !loggedIn) {
       router.replace("/");
     }
-  }, [loggedIn, router]);
+  }, [loggedIn, loading, router]);
 
-  if (loading || loggedIn) {
+  if (loading || !loggedIn) {
     return <Loading />;
   }
 
