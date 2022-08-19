@@ -1,14 +1,14 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-const useAxiosData = (modifyData) => {
+const useAxiosData = () => {
   const [data, setData] = useState({
     loading: false,
     data: undefined,
     error: false,
   });
 
-  const makeRequest = (request) => {
+  const makeRequest = (request: Promise<any>) => {
     setData({
       loading: true,
       data: undefined,
@@ -17,11 +17,9 @@ const useAxiosData = (modifyData) => {
 
     request
       .then((resp) => {
-        const finalData = modifyData ? modifyData(resp.data) : resp.data;
-
         setData({
           loading: false,
-          data: finalData,
+          data: resp.data,
           error: false,
         });
       })
@@ -37,10 +35,6 @@ const useAxiosData = (modifyData) => {
   };
 
   return [data, makeRequest];
-};
-
-useAxiosData.propTypes = {
-  modifyData: PropTypes.func,
 };
 
 export default useAxiosData;
