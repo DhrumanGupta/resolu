@@ -16,6 +16,7 @@ const petitionBaseRoute = `${basePath}/petition`;
 export const petitionRoutes = {
   getFromId: (id: string) => `${petitionBaseRoute}/${id}`,
   getAll: (query: string) => `${petitionBaseRoute}${query}`,
+  getUser: `${petitionBaseRoute}/user`,
   create: `${petitionBaseRoute}/`,
   sign: `${petitionBaseRoute}/sign`,
   video: `${petitionBaseRoute}/videos`,
