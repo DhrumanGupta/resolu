@@ -1,9 +1,11 @@
+import MetaDecorator from "components/MetaDecorator";
 import type { NextPageContext } from "next";
 import Link from "next/link";
 
 const Error = ({ statusCode }: { statusCode: number }) => {
   return (
     <main className="absolute bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2">
+      <MetaDecorator description="Unexpected error" name={`(${statusCode})`} />
       <h1 className="font-extrabold text-7xl md:text-8xl border-1 border-orange text-center">
         {statusCode}
       </h1>

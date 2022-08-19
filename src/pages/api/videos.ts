@@ -18,13 +18,13 @@ const CHUNK_SIZE_IN_BYTES = 1000000; // ~1mb
 //   name: string;
 // };
 
-const hash = (data: string): string => {
+export const hash = (data: string): string => {
   return createHash("md5").update(data).digest("hex");
 };
 
 function uploadVideoStream(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
   user: User
 ) {
   console.log(req.session.user);

@@ -1,36 +1,50 @@
 import { prisma } from "lib/db";
 import { Prisma } from "@prisma/client";
-import type { Book } from "types/DTOs";
+import type { Petition, User } from "types/DTOs";
+import { hash } from "pages/api/videos";
 
-type BookWithPictures = Prisma.BookGetPayload<{ include: { pictures: true } }>;
+type HydratedPetition = Prisma.PetitionGetPayload<{
+  include: { votes: true; listedBy: true };
+}>;
 
-interface PriceRange {
-  low: number;
-  high: number;
-}
+const DtoFromHydrated = (petition: HydratedPetition): Petition => ({
+  id: petition.id,
+  title: petition.title,
+  description: petition.description,
+  listedOn: petition.listedOn,
+  goal: petition.goal,
+  votes: petition.votes.length,
+  latitude: petition.latitude,
+  longitude: petition.longitude,
+  videoId: petition.videoId,
+  listedBy: petition.listedBy,
+});
 
 interface GetBookProps {
   cursor?: string;
-  isbn?: string;
   search?: string;
-  priceRange?: PriceRange;
 }
 
-async function getBooks({
+async function getPetitions({
   cursor,
-  isbn,
   search,
-  priceRange,
-}: GetBookProps): Promise<Book[]> {
-  const query: Parameters<typeof prisma.book.findMany>[0] = {
+}: GetBookProps): Promise<Petition[]> {
+  const query: Parameters<typeof prisma.petition.findMany>[0] = {
     take: 20,
     orderBy: {
       listedOn: "desc",
     },
     include: {
-      pictures: {
+      votes: {
         select: {
-          url: true,
+          voterEmail: true,
+        },
+      },
+      listedBy: {
+        select: {
+          email: true,
+          name: true,
+          id: true,
         },
       },
     },
@@ -40,10 +54,6 @@ async function getBooks({
     query.cursor = { id: cursor };
   }
 
-  if (isbn) {
-    query.where = { ...query.where, isbn: { contains: isbn.toUpperCase() } };
-  }
-
   if (search) {
     query.where = {
       ...query.where,
@@ -51,63 +61,91 @@ async function getBooks({
     };
   }
 
-  if (priceRange && priceRange.high > priceRange.low && priceRange.low >= 0) {
-    query.where = {
-      ...query.where,
-      price: {
-        gte: priceRange.low,
-        lte: priceRange.high,
-      },
-    };
-  }
+  const petitions = (await prisma.petition.findMany(
+    query
+  )) as HydratedPetition[];
 
-  const books = (await prisma.book.findMany(query)) as BookWithPictures[];
-  const transformed = books.map((book) => ({
-    id: book.id,
-    title: book.title,
-    isbn: book.isbn,
-    description: book.description,
-    price: book.price,
-    featuredPicture: book.featuredPicture,
-    listedOn: book.listedOn,
-    pictures: book.pictures.map((picture) => picture.url),
-  }));
+  const transformed = petitions.map(DtoFromHydrated);
 
   return transformed;
 }
 
-async function getBook({ id }: { id: string }): Promise<Book | null> {
+async function getPetition({ id }: { id: string }): Promise<Petition | null> {
   if (!id) {
     return null;
   }
 
-  const book = (await prisma.book.findFirst({
+  const petition = (await prisma.petition.findFirst({
     where: { id },
     include: {
-      pictures: {
+      votes: {
         select: {
-          url: true,
+          voterEmail: true,
+        },
+      },
+      listedBy: {
+        select: {
+          email: true,
+          name: true,
+          id: true,
         },
       },
     },
-  })) as BookWithPictures;
+  })) as HydratedPetition;
 
-  if (!book) {
+  if (!petition) {
     return null;
   }
 
-  const transformed = {
-    id: book.id,
-    title: book.title,
-    isbn: book.isbn,
-    description: book.description,
-    price: book.price,
-    featuredPicture: book.featuredPicture,
-    listedOn: book.listedOn,
-    pictures: book.pictures.map((picture) => picture.url),
-  };
+  const transformed = DtoFromHydrated(petition);
 
   return transformed;
 }
 
-export { getBooks, getBook };
+async function createPetition({
+  title,
+  description,
+  goal,
+  videoName,
+  latitude,
+  longitude,
+  user,
+}: {
+  title: string;
+  description: string;
+  goal: number;
+  videoName: string;
+  latitude: number;
+  longitude: number;
+  user: User;
+}): Promise<Petition | null> {
+  const videoId = hash(videoName);
+  const existsWithVideo =
+    (await prisma.petition.count({ where: { videoId } })) > 0;
+  if (existsWithVideo) {
+    return null;
+  }
+
+  const petition = await prisma.petition.create({
+    data: {
+      title,
+      description,
+      goal,
+      videoId,
+      latitude,
+      longitude,
+      listedById: user.id,
+    },
+    include: {
+      votes: {
+        select: {
+          voterEmail: true,
+        },
+      },
+    },
+  });
+
+  return DtoFromHydrated(petition as HydratedPetition);
+}
+
+export { getPetitions, getPetition, createPetition };
