@@ -53,16 +53,18 @@ const createPetition = async (
     return res.status(400).send({ msg: "Missing required fields" });
   }
 
-  const ip = requestIp.getClientIp(req)?.split(":").splice(-1)[0];
-
-  const { data } = await axios.get(`https://ipapi.co/${ip}/json/`);
+  const ip = requestIp.getClientIp(req)?.split(":")?.splice(-1)[0];
+  let data: any;
+  try {
+    data = (await axios.get(`https://ipapi.co/${ip}/json/`)).data;
+  } catch {}
   const petition = await createPetitionFromDb({
     title,
     description,
     goal,
     videoName,
-    latitude: data.latitude,
-    longitude: data.longitude,
+    latitude: data.latitude || 28.4597,
+    longitude: data.longitude || 77.0282,
     user,
   });
 
